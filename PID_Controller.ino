@@ -68,7 +68,7 @@ void loop() {
 
   int P = 0.1 * (target_pos - pos);
   int I = 0;
-  int D = 0.1 * (event.gyro.x);
+  int D = -0.1 * (event.gyro.x);
 
   ESC.write(P + I + D);
 

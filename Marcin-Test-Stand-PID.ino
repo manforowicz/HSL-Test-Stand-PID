@@ -4,6 +4,9 @@
 #include <utility/imumaths.h>
 #include <Servo.h>
 
+// MARCIN'S VERY BARE-BONES TEST-STAND PID
+
+
 //   BNO055 Connections
 //   ===========
 //   CSCL --- A5
@@ -18,20 +21,21 @@
 // Yellow --- 9
 
 
-/* Set the delay between fresh samples */
+// Delay between loops
 #define BNO055_SAMPLERATE_DELAY_MS (10)
 
+// PWM where the motor doesn't spin
 #define STATIONARY_PWM (1500)
 
+// Maximum PWM
 #define MAX_PWM (2000)
 
+// Minimum PWM
 #define MIN_PWM (1000)
 
-// Check I2C device address and correct line below (by default address is 0x29 or 0x28)
-//                                   id, address
-Adafruit_BNO055 bno = Adafruit_BNO055(55); //, 0x28);
+Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
-float target_pos;
+float target_pos; // Position for PID to aim at
 
 Servo ESC; // Pretending our ESC is a servo
 
@@ -71,7 +75,6 @@ void setup() {
   target_pos = event.orientation.roll;
 
   Serial.println("Setup finished!");
-
 }
 
 void loop() {

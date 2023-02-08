@@ -92,10 +92,10 @@ void loop() {
   float pwm_out = STATIONARY_PWM + P + I + D;
 
   // constrain pwm to range
-  pwm_out = constrain(write_val, MIN_PWM, MAX_PWM);
+  pwm_out = constrain(pwm_out, MIN_PWM, MAX_PWM);
 
   
-  Serial.print("Outputting PWM: "); Serial.println(write_val);
+  Serial.print("Outputting PWM: "); Serial.println(pwm_out);
 
   ESC.writeMicroseconds(pwm_out);
 

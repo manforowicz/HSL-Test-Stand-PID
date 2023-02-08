@@ -6,18 +6,12 @@ Servo ESC; // Pretending our ESC is a servo
 
 // Calibrate ESC by plugging in battery when
 // MAX_PWM is being outputted.
-void calibrateESC() {
-<<<<<<< HEAD
-  ESC.writeMicroseconds(MAX_PWM);
-  delay(8000);
-  ESC.writeMicroseconds(MIN_PWM);
-=======
-  ESC.writeMicroseconds(2000);
-  delay(8000);
-  ESC.writeMicroseconds(1000);
->>>>>>> 1ec5294 (Added motor spin program, changed #define to const)
-  delay(1000);
-}
+//void calibrateESC() {
+//  ESC.writeMicroseconds(M);
+//  delay(8000);
+//  ESC.writeMicroseconds(MIN_PWM);
+//  delay(1000);
+//}
 
 void setup() {
   Serial.begin(9600);
@@ -26,9 +20,10 @@ void setup() {
   ESC.attach(9,1000,2000); // (pin, min pulse width, max pulse width in microseconds) 
 
   ESC.writeMicroseconds(1500);
-  delay(1000);
+  delay(5000);
+  ESC.writeMicroseconds(1600);
 }
 
 void loop() {
-
+  
 }

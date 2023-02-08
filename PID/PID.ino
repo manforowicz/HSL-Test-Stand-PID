@@ -38,10 +38,8 @@ Servo ESC; // Pretending our ESC is a servo
 // Calibrate ESC by plugging in battery when
 // MAX_PWM is being outputted.
 void calibrateESC() {
-  ESC.writeMicroseconds(MAX_PWM);
-  delay(8000);
-  ESC.writeMicroseconds(MIN_PWM);
-  delay(1000);
+  ESC.writeMicroseconds(STATIONARY_PWM);
+  delay(4000);
 }
 
 // Displays orientation
@@ -63,7 +61,7 @@ void setup() {
 
   // Attach the ESC on pin 9
   ESC.attach(9,1000,2000); // (pin, min pulse width, max pulse width in microseconds) 
-  ESC.writeMicroseconds(STATIONARY_PWM);
+  calibrateESC();
 
   // Set the target_pos to current position
   sensors_event_t event;

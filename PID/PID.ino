@@ -22,16 +22,12 @@
 
 
 // Delay between loops
-#define BNO055_SAMPLERATE_DELAY_MS (10)
+const int BNO055_SAMPLERATE_DELAY_MS (10)
 
-// PWM where the motor doesn't spin
-#define STATIONARY_PWM (1500)
-
-// Maximum PWM
-#define MAX_PWM (2000)
-
-// Minimum PWM
-#define MIN_PWM (1000)
+// Units: microseconds
+const float STATIONARY_PWM (1500) // PWM where the motor doesn't spin
+const float MAX_PWM (2000)
+const float MIN_PWM (1000)
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
@@ -65,7 +61,7 @@ void setup() {
   }
   bno.setExtCrystalUse(true);
 
-  // Set up the ESC
+  // Attach the ESC on pin 9
   ESC.attach(9,1000,2000); // (pin, min pulse width, max pulse width in microseconds) 
   ESC.writeMicroseconds(STATIONARY_PWM);
 

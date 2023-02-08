@@ -7,9 +7,15 @@ Servo ESC; // Pretending our ESC is a servo
 // Calibrate ESC by plugging in battery when
 // MAX_PWM is being outputted.
 void calibrateESC() {
+<<<<<<< HEAD
   ESC.writeMicroseconds(MAX_PWM);
   delay(8000);
   ESC.writeMicroseconds(MIN_PWM);
+=======
+  ESC.writeMicroseconds(2000);
+  delay(8000);
+  ESC.writeMicroseconds(1000);
+>>>>>>> 1ec5294 (Added motor spin program, changed #define to const)
   delay(1000);
 }
 

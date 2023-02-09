@@ -4,7 +4,7 @@
 #include <utility/imumaths.h>
 #include <Servo.h>
 
-// MARCIN'S VERY BARE-BONES TEST-STAND PID
+// MARCIN'S BARE-BONES TEST-STAND PID
 
 //   BNO055 Connections
 //   ============
@@ -42,7 +42,7 @@ Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
 
 // Displays sensor reading
-void printEvent(sensors_event_t* event) {
+void printSensorEvent(sensors_event_t* event) {
   // roll/x range: (-90, 90)
   // pitch/y range: (-180, 180)
   // heading/z range: (0, 359)
@@ -89,10 +89,10 @@ void setup() {
   }
   bno.setExtCrystalUse(true);
 
-  // Initialize ESC by writting STATIONARY_PWM for 2 seconds
-  ESC.attach(9,1000,2000); // (pin, min pulse width, max pulse width in microseconds) 
+  // Initialize ESC by writting STATIONARY_PWM for 3 seconds
+  ESC.attach(9);
   ESC.writeMicroseconds(STATIONARY_PWM);
-  delay(2000);
+  delay(3000);
 
   // Set the target_pos to current position
   sensors_event_t event;
@@ -107,7 +107,7 @@ void loop() {
   // https://adafruit.github.io/Adafruit_CircuitPlayground/html/structsensors__event__t.html
   sensors_event_t event;
   bno.getEvent(&event);
-  printEvent(&event);
+  printSensorEvent(&event);
 
   float velocity = event.gyro.x; // gyro gives velocity
   float angle = event.orientation.x;

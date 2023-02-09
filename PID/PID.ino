@@ -29,7 +29,7 @@ const float MAX_PWM = 1700;
 const float MIN_PWM = 1300;
 
 // Direction of motor spin
-const bool reverseMotor = true;
+const bool REVERSE_MOTOR = true;
 
 // The target angle for PID to aim at
 float target_angle;
@@ -65,6 +65,20 @@ void printEvent(sensors_event_t* event) {
   Serial.print(event -> gyro.z);
   Serial.println(")");
 }
+
+void spinMotor(float velocity) {
+  if (REVERSE_MOTOR) {
+    velocity = -velocity;
+  }
+
+  float pwm_out = STATIONARY_PWM + velocity;
+
+  // constrain pwm to range for safety
+  pwm_out = constrain(pwm_out, MIN_PWM, MAX_PWM);
+  
+  ESC.writeMicroseconds(pwm_out);
+}
+
 
 void setup() {
   Serial.begin(9600);
@@ -103,17 +117,6 @@ void loop() {
   float I = 0; // set to zero for now
   float D = -0.1 * (velocity); // set to zero for now
 
-  float spin_out = P + I + D;
-  if (reverseMotor) {
-    spin_out = -spin_out;
-  }
-
-  float pwm_out = STATIONARY_PWM + spin_out;
-
-  // constrain pwm to range for safety
-  pwm_out = constrain(pwm_out, MIN_PWM, MAX_PWM);
-  
-  ESC.writeMicroseconds(pwm_out);
-
+  spinMotor(P + I + D);
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }

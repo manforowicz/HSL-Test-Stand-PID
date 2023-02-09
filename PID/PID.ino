@@ -57,7 +57,7 @@ void printEvent(sensors_event_t* event) {
   Serial.print(event -> orientation.z);
   Serial.print(") ");
 
-  Serial.print("Gyro: ");
+  Serial.print("Gyro: (");
   Serial.print(event -> gyro.x);
   Serial.print(", ");
   Serial.print(event -> gyro.y);
@@ -70,7 +70,6 @@ void spinMotor(float velocity) {
   if (REVERSE_MOTOR) {
     velocity = -velocity;
   }
-
   float pwm_out = STATIONARY_PWM + velocity;
 
   // constrain pwm to range for safety

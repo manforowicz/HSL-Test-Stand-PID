@@ -6,7 +6,6 @@
 
 // MARCIN'S VERY BARE-BONES TEST-STAND PID
 
-
 //   BNO055 Connections
 //   ============
 //   CSCL --- A5
@@ -20,6 +19,7 @@
 // Yellow --- 9
 
 
+
 // Delay between loops
 const int BNO055_SAMPLERATE_DELAY_MS = 10;
 
@@ -31,17 +31,21 @@ const float MIN_PWM = 1300;
 // Direction of motor spin
 const bool reverseMotor = true;
 
-Adafruit_BNO055 bno = Adafruit_BNO055(55);
-
 // The target angle for PID to aim at
 float target_angle;
 
 // Pretending ESC is servo
 Servo ESC;
+Adafruit_BNO055 bno = Adafruit_BNO055(55);
+
+
+
 
 // Displays sensor reading
 void printEvent(sensors_event_t* event) {
   // roll/x range: (-90, 90)
+  // pitch/y range: (-180, 180)
+  // heading/z range: (0, 359)
   
   Serial.print("(roll/x, pitch/y, heading/z) ");
   

@@ -8,15 +8,14 @@
 
 
 //   BNO055 Connections
-//   ===========
+//   ============
 //   CSCL --- A5
 //   SDA ---- A4
 //   VDD ---- 3.3-5V DC
 //   GND ---- Common Ground
 
-
 // ESC Connections
-// ================
+// ==============
 // Dark ----- GND
 // Yellow --- 9
 
@@ -29,24 +28,38 @@ const float STATIONARY_PWM = 1500; // PWM where the motor doesn't spin
 const float MAX_PWM = 1700;
 const float MIN_PWM = 1300;
 
+// Direction of motor spin
+const bool reverseMotor = true;
+
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
-float target_pos; // Position for PID to aim at
+// The target angle for PID to aim at
+float target_angle;
 
-Servo ESC; // Pretending our ESC is a servo
+// Pretending ESC is servo
+Servo ESC;
 
-// Calibrate ESC by plugging in battery when
-// MAX_PWM is being outputted.
-void calibrateESC() {
-  ESC.writeMicroseconds(STATIONARY_PWM);
-  delay(2000);
-}
+// Displays sensor reading
+void printEvent(sensors_event_t* event) {
+  // roll/x range: (-90, 90)
+  
+  Serial.print("(roll/x, pitch/y, heading/z) ");
+  
+  Serial.print("Orientation: (");
+  Serial.print(event -> orientation.x);
+  Serial.print(", ");
+  Serial.print(event -> orientation.y);
+  Serial.print(", ");
+  Serial.print(event -> orientation.z);
+  Serial.print(") ");
 
-// Displays orientation
-void displaySensorDetails(sensors_event_t &event) {
-  Serial.print("Orientation.roll "); Serial.println(event.orientation.roll);
-  // Serial.print("Orientation.azimuth "); Serial.println(event.orientation.azimuth);
-  //Serial.print("Orientation.pitch "); Serial.println(event.orientation.pitch);
+  Serial.print("Gyro: ");
+  Serial.print(event -> gyro.x);
+  Serial.print(", ");
+  Serial.print(event -> gyro.y);
+  Serial.print(", ");
+  Serial.print(event -> gyro.z);
+  Serial.println(")");
 }
 
 void setup() {
@@ -59,41 +72,44 @@ void setup() {
   }
   bno.setExtCrystalUse(true);
 
-  // Attach the ESC on pin 9
+  // Initialize ESC by writting STATIONARY_PWM for 2 seconds
   ESC.attach(9,1000,2000); // (pin, min pulse width, max pulse width in microseconds) 
-  calibrateESC();
+  ESC.writeMicroseconds(STATIONARY_PWM);
+  delay(2000);
 
   // Set the target_pos to current position
   sensors_event_t event;
   bno.getEvent(&event);
-  target_pos = event.orientation.roll;
+  target_angle = event.orientation.roll;
 
   Serial.println("Setup finished!");
 }
 
 void loop() {
-  // store sensor data in "event"
+  // store sensor data in "event". Documentation:
+  // https://adafruit.github.io/Adafruit_CircuitPlayground/html/structsensors__event__t.html
   sensors_event_t event;
   bno.getEvent(&event);
+  printEvent(&event);
 
-  float vel = event.gyro.x; // gyro gives velocity
-  float pos = event.orientation.roll;
+  float velocity = event.gyro.x; // gyro gives velocity
+  float angle = event.orientation.x;
 
-  float P = 1 * (pos - target_pos);
+  float P = 1 * (target_angle - angle);
   float I = 0; // set to zero for now
-  float D = -0.0 * (vel); // set to zero for now
+  float D = -0.1 * (velocity); // set to zero for now
 
-  float pwm_out = STATIONARY_PWM + P + I + D;
+  float spin_out = P + I + D;
+  if (reverseMotor) {
+    spin_out = -spin_out;
+  }
 
-  // constrain pwm to range
+  float pwm_out = STATIONARY_PWM + spin_out;
+
+  // constrain pwm to range for safety
   pwm_out = constrain(pwm_out, MIN_PWM, MAX_PWM);
-
   
-  //Serial.print("Outputting PWM: "); Serial.println(pwm_out);
-  //Serial.println(pos - target_pos);
-  //Serial.println(event.gyro.roll);
   ESC.writeMicroseconds(pwm_out);
-  //displaySensorDetails(event);
 
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }

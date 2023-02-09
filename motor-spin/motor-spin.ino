@@ -20,7 +20,7 @@ void setup() {
   ESC.attach(9,1000,2000); // (pin, min pulse width, max pulse width in microseconds) 
 
   ESC.writeMicroseconds(1500);
-  delay(5000);
+  delay(5000);ESC.writeMicroseconds(STATIONARY_PWM);
   ESC.writeMicroseconds(1600);
 }
 

@@ -26,8 +26,8 @@ const int BNO055_SAMPLERATE_DELAY_MS = 10;
 
 // Units: microseconds
 const float STATIONARY_PWM = 1500; // PWM where the motor doesn't spin
-const float MAX_PWM = 2000;
-const float MIN_PWM = 1000;
+const float MAX_PWM = 1700;
+const float MIN_PWM = 1300;
 
 Adafruit_BNO055 bno = Adafruit_BNO055(55);
 
@@ -39,14 +39,14 @@ Servo ESC; // Pretending our ESC is a servo
 // MAX_PWM is being outputted.
 void calibrateESC() {
   ESC.writeMicroseconds(STATIONARY_PWM);
-  delay(4000);
+  delay(2000);
 }
 
 // Displays orientation
 void displaySensorDetails(sensors_event_t &event) {
   Serial.print("Orientation.roll "); Serial.println(event.orientation.roll);
   // Serial.print("Orientation.azimuth "); Serial.println(event.orientation.azimuth);
-  Serial.print("Orientation.pitch "); Serial.println(event.orientation.pitch);
+  //Serial.print("Orientation.pitch "); Serial.println(event.orientation.pitch);
 }
 
 void setup() {
@@ -79,7 +79,7 @@ void loop() {
   float vel = event.gyro.x; // gyro gives velocity
   float pos = event.orientation.roll;
 
-  float P = 0.5 * (pos - target_pos);
+  float P = 1 * (pos - target_pos);
   float I = 0; // set to zero for now
   float D = -0.0 * (vel); // set to zero for now
 
@@ -89,9 +89,11 @@ void loop() {
   pwm_out = constrain(pwm_out, MIN_PWM, MAX_PWM);
 
   
-  Serial.print("Outputting PWM: "); Serial.println(pwm_out);
-
+  //Serial.print("Outputting PWM: "); Serial.println(pwm_out);
+  //Serial.println(pos - target_pos);
+  //Serial.println(event.gyro.roll);
   ESC.writeMicroseconds(pwm_out);
+  //displaySensorDetails(event);
 
   delay(BNO055_SAMPLERATE_DELAY_MS);
 }

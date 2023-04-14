@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "programmer": "avrisp",
+    "sketch": "magnetorquer-demo/magnetorquer-demo.ino"
+}

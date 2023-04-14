@@ -1,17 +1,29 @@
-# Marcin-Test-Stand-PID
-Simple Arduino program that uses a brushless motor and BN0O55 IMU to control orientation.
+# huskysat-arduino
 
-BNO055 IMU Resources:
+- motor-spin: Spins a brushless motor to confirm it's working.
+- PID: Uses motor to stabilize test stand using BNO055 IMU to determine orientation.
+- magnetorquer-demo: Oscillates magnetorquer back and forth.
 
-[sensors_event_t](https://adafruit.github.io/Adafruit_CircuitPlayground/html/structsensors__event__t.html)
+## Resources
 
-[code example](https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/arduino-code)
+### BNO055 IMU
 
-[adafruit_sensor](https://learn.adafruit.com/using-the-adafruit-unified-sensor-driver/how-does-it-work)
+- [sensors_event_t](https://adafruit.github.io/Adafruit_CircuitPlayground/html/structsensors__event__t.html)
 
-PID Resources:
+- [code example](https://learn.adafruit.com/adafruit-bno055-absolute-orientation-sensor/arduino-code)
 
-[PID Tutorial](https://janismac.github.io/ControlChallenges/)
+- [adafruit_sensor](https://learn.adafruit.com/using-the-adafruit-unified-sensor-driver/how-does-it-work)
 
-ESC Notes:
+### PID
+
+- [PID Tutorial](https://janismac.github.io/ControlChallenges/)
+
+### Magnetorquers
+
+- [Marcin's Video](https://youtu.be/cGJYCe6mGR0)
+
+- [Marcin's Magnetorquer Designer](https://github.com/manforowicz/Magnetorquer-Calc)
+
+### ESC
+
 Good bidirectional ESCs don't need callibration, other than sending a 1500 microsecond PWM for a few seconds at the beginning.
